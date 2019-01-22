@@ -11,6 +11,8 @@ I used [YOLO](https://pjreddie.com/darknet/yolo/) with the pretrained model "Tin
 
 [This tutorial](https://www.arunponnusamy.com/yolo-object-detection-opencv-python.html) got me started on running YOLO using python and opencv, which also goes over installing python (not necessary on Raspberry Pi, as the normal Raspbian has python installed by default), installing numpy and installing opencv.
 
+[This](https://www.pyimagesearch.com/2015/12/28/increasing-raspberry-pi-fps-with-python-and-opencv/) helped me to include threading, which didnt't increade fps, but made the image analysis real time. Before, there was an 8 second delay due to the buffer not being cleared.
+
 I also used another tutorial to get me started on the webcam code, I will add the website later as I can't find it at the moment.
 
 # Installation
