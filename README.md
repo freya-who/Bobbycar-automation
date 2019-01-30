@@ -18,7 +18,18 @@ I also used another tutorial to get me started on the webcam code, I will add th
 # Installation
 The aforementioned [tutorial](https://www.arunponnusamy.com/yolo-object-detection-opencv-python.html) descibes how to install the necessary dependencies.
 
-To install opencv on the Raspberry however, a few more packages need to be installed, I will post the complete installation of opencv for the Raspberry Pi later.
+To install opencv on the Raspberry however, a few more packages need to be installed, here are the instructions needed to install opencv on the Raspberry Pi:
+
+```
+pip install opencv-python
+sudo apt-get install libatlas-base-dev
+sudo apt-get install libjasper-dev
+sudo apt-get install libqtgui4
+sudo apt-get install python3-pyqt5
+sudo apt-get install libqt4-test
+
+```
+
 
 # Current status
 At the moment the project reaches only roughly 1fps, however, using threading, this is at least real time and not delayed.

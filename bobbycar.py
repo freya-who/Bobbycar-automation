@@ -20,8 +20,7 @@ driveLeft = 280     #280
 driveRight = 350    #350
 accelerate = 200    #100
 cam = 0
-
-        
+          
 # Load names of classes
 classesFile = "coco.names";
 classes = None
