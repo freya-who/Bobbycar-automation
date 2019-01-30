@@ -1,0 +1,15 @@
+first commit version:
+
+[INFO] sampling THREADED frames from webcam...
+[INFO] elasped time: 57.08
+[INFO] approx. FPS: 0.91
+
+[INFO] sampling THREADED frames from webcam...
+[INFO] elasped time: 102.16
+[INFO] approx. FPS: 0.95
+
+[INFO] sampling THREADED frames from webcam...
+[INFO] elasped time: 40.58
+[INFO] approx. FPS: 0.94
+
+Lag: changes in next or second to next frame, filming a stop watch shows 2-3 seconds delay
