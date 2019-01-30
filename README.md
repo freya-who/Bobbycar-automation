@@ -30,6 +30,11 @@ sudo apt-get install libqt4-test
 
 ```
 
+Upon restart the camera module doesn't work, you have to run:
+```
+sudo modprobe bcm2835-v4l2
+```
+
 
 # Current status
 At the moment the project reaches only roughly 1fps, however, using threading, this is at least real time and not delayed.
