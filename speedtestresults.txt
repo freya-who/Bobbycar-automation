@@ -13,3 +13,18 @@ first commit version:
 [INFO] approx. FPS: 0.94
 
 Lag: changes in next or second to next frame, filming a stop watch shows 2-3 seconds delay
+
+
+after building opencv 4.0.0 with ARM NEON and VFPV3 options enabled:
+
+[INFO] sampling THREADED frames from webcam...
+[INFO] elasped time: 49.71
+[INFO] approx. FPS: 0.91
+
+[INFO] sampling THREADED frames from webcam...
+[INFO] elasped time: 58.57
+[INFO] approx. FPS: 0.92
+
+[INFO] sampling THREADED frames from webcam...
+[INFO] elasped time: 66.50
+[INFO] approx. FPS: 0.92
