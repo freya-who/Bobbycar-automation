@@ -43,6 +43,11 @@ If upon (re)start the camera module doesn't work (nothing found with `ls /dev/vi
 sudo modprobe bcm2835-v4l2
 ```
 
+To start the pigpio service to control the servos run 
+```
+sudo pigpiod
+```
+
 
 # Current status
 At the moment the project reaches only roughly 1fps, however, using threading, this is at least roughly real time and not delayed. Before threading, the delay was about 8 seconds.
