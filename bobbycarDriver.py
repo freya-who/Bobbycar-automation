@@ -1,56 +1,52 @@
-from gpiozero import Servo, LED
-
-# https://www.raspberrypi-spy.co.uk/2018/02/basic-servo-use-with-the-raspberry-pi/ 
+import pigpio
+from time import sleep
 
 SERVOPIN = 18
 ACCPIN = 17
 
-##dummyservo
-#class Servo:
-#    def __init__(self, num):
-#        self.pin = num
-#        self.value = 0
-#        
-#class LED:
-#    def __init__(self, num):
-#        self.pin = num
-#        self.state = False
-#    def on(self):
-#        self.state = True
-#        print('LED on')
-#    def off(self):
-#        self.state = False
-#        print('LED off')
-
 class BobbycarDriver:
     def __init__(self):
+        self.pi = pigpio.pi()
+        self.pi.set_mode(SERVOPIN, pigpio.OUTPUT)
+        self.pi.set_mode(ACCPIN, pigpio.OUTPUT)
         self.steeringwheelPos = 0
-        self.servo = Servo(SERVOPIN)
-        self.accelerator = LED(ACCPIN) 
-        
+        self.currentSteeringDirection = "straight"
+
     def driveLeft(self, amount):
         if 0 <= amount <= 1:
-            self.servo.value = -amount
-            print('servo links gelenkt %s' % - amount)
+            # map 0...1 to 1500...1000
+            servoAmount = 1500 - 500*amount
+            self.pi.set_servo_pulsewidth(SERVOPIN, servoAmount)
+            print('servo steered left by %s' % amount)
+            self.currentSteeringDirection = "left"
         else:
             print('Parameter amount must be between 0 and 1')
             
     def driveStraight(self):
-        self.servo.value = 0
+        self.pi.set_servo_pulsewidth(SERVOPIN, 1500)
+        self.currentSteeringDirection = "straight"
     
     def driveRight(self, amount):
         if 0 <= amount <= 1:
-            self.servo.value = amount
-            print('servo rechts gelenkt %s' % amount)
+            # map 0...1 to 1500...2000
+            servoAmount = 1500 + 500*amount
+            self.pi.set_servo_pulsewidth(SERVOPIN, servoAmount)
+            print('servo steered right by %s' % amount)
+            self.currentSteeringDirection = "right"
         else:
             print('Parameter amount must be between 0 and 1')
         
     def accelerate(self):
-        self.accelerator.on()
-        
+        self.pi.write(ACCPIN,1)
+#        
+#        # maybe use some software PWM (1000 Hz maybe?)
+#        self.pi.set_PWM_frequency(ACCPIN,1000)
+#        # map 0...1 to 0...255 for dutycycle
+#        dutyCycle = amount * 255
+#        self.pi.set_PWM_dutycycle(ACCPIN, dutyCycle)
+               
     def stop(self):
-        self.accelerator.off()
-        
+        self.pi.write(ACCPIN,0)
     
-        
-        
+    def cleanup(self):
+        self.pi.stop()

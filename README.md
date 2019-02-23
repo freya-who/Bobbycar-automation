@@ -8,7 +8,26 @@ The logic behind the project can later be applied to other automation tasks, e.g
 
 The file `webcamObjectDetection.py` is an object detector for a camera stream.
 
-The file `bobbycar.py` will hold the specific object detection and steering with GPIOS (not yet implemented).
+The file `bobbycar.py` is the main script that calls the specific object detection and the steering with GPIOS.
+
+`bobbycarDriver.py` controls the GPIOS using pigpio.
+
+`detectSymbolYOLO.py` is the object detector using YOLO.
+
+`detectSymbolRectangle.py` is the object detector using rectangles, it detects if there is a (printout of a) red rectangle on top of a blue rectangle somewhere in the frame.
+This is the currently used method as it is significantly faster than YOLO (5-6fps vs. <1fps).
+
+You can switch betweem them by using either:
+```
+symbolDetector = RectanglesDetector()
+```
+or 
+```
+symbolDetector = SymbolDetectorYOLO()
+```
+in `bobbycar.py`.
+
+
 
 # Sources
 I used [YOLO](https://pjreddie.com/darknet/yolo/) with the pretrained model "Tiny YOLOv3" for this project.
@@ -50,13 +69,20 @@ sudo pigpiod
 
 
 # Current status
-At the moment the project reaches only roughly 1fps, however, using threading, this is at least roughly real time and not delayed. Before threading, the delay was about 8 seconds.
 
-I tried to increase the speed by compiling opencv myself with ARM NEON and VFPV3 options enabled (see `Sources` for tutorial), but either opencv 4.0.0 is compiled with those options anyway or YOLO doesn't make use of those option, because there was no increase in FPS.
+For now I have switched to a simpler Rectangle Detector, so the Bobbycar will be following a printout of a red rectangle above a blue rectangle.
 
-People and other objects are detected in the webcam video stream, however, no motors or servos are being controled using this information yet.
+I also tried circle detection using Hugh transformation but finding the right parameters is tricky and so dependent on the surroundings that it isn't a feasible approach in this case.
+
+<s>At the moment the project reaches only roughly 1fps with YOLO, however, using threading, this is at least roughly real time and not delayed. Before threading, the delay was about 8 seconds.
+
+I tried to increase the speed by compiling opencv myself with ARM NEON and VFPV3 options enabled (see `Sources` for tutorial), but it seems opencv 4.0.0 is already compiled with those options, because there was no increase in FPS.</s>
+
 
 # To Do
-* Decide on one or two objects to recognize, print out images to test detection
-* Connect and control servos and motor on Bobbycar
-* Make detection faster (5fps would be good)
+* Fix white balance in pi camera to reliably detect blue and red rectangles
+* Speed control depending on size of object in frame
+* Connect servos and motor on Bobbycar
+* Figure out logistics: make the script start when button is pressed (no screen during normal usage), implement a logger, make `sudo modprobe bcm2835-v4l2` and `sudo pigpiod` run when button is pressed, before script is started, disable all `imshow` functionality
+* Make YOLO detection faster (5fps would be good) - HOW?
+* Maybe to improve ease-of-use use circle detection (not using Hugh Transform though, that is a massive pain to get the parameters right...) and paint some spheres red and blue, relatively small, put them on a keychain and carry those around. Probably easier than keeping a printout of rectangles taped to your back...
