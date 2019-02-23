@@ -115,16 +115,16 @@ class RectanglesDetector:
                     blueLowerLimit = cY-h//2
                     for rr in redRectangles:
                         # is above or below?
-                        print('x deviation:')
-                        print(rr.cX - cX)
+#                        print('x deviation:')
+#                        print(rr.cX - cX)
                         if (rr.cX <= cX+C_XDEVIATION) and (rr.cX >= cX-C_XDEVIATION):
                             # is directly above?
-                            print('upper limit red rectangle:')
-                            print(rr.upperLimit)
-                            print('lower limit blue rectangle:')
-                            print(blueLowerLimit)
-                            print('rectangle distance')
-                            print(rr.upperLimit - blueLowerLimit)
+#                            print('upper limit red rectangle:')
+#                            print(rr.upperLimit)
+#                            print('lower limit blue rectangle:')
+#                            print(blueLowerLimit)
+#                            print('rectangle distance')
+#                            print(rr.upperLimit - blueLowerLimit)
                             if (rr.upperLimit >= blueLowerLimit-C_RECTDISTANCE) and (rr.upperLimit <= blueLowerLimit+C_RECTDISTANCE):
                                 # rr roughly above blue rectangle
                                 # draw contour around both

@@ -1,14 +1,15 @@
-from detectSymbolRectangle import RectanglesDetector
-from detectSymbolYOLO import SymbolDetectorYOLO
-from bobbycarDriver import BobbycarDriver
+from objectDetection.detectSymbolRectangle import RectanglesDetector
+from objectDetection.detectSymbolYOLO import SymbolDetectorYOLO
+from gpioSteering.bobbycarDriver import BobbycarDriver
 from imutils.video import WebcamVideoStream
 from imutils.video import FPS
 import imutils
 import cv2 as cv
 import numpy as np
+#import picamera
 
 # Initialize the parameters
-C_STANDARDSIZE = 100
+C_STANDARDSIZE = 160
 
 def on_mouse_click (event, x, y, flags, frame):
     if event == cv.EVENT_LBUTTONUP:
@@ -18,6 +19,10 @@ def on_mouse_click (event, x, y, flags, frame):
         print("xy")
         print(x,y)
         
+# set camera white balance to fixed value
+#camera = picamera.PiCamera()
+#camera.awb_mode = 'off'
+#camera.awb_gains = 8,5
 
 # created a *threaded* video stream, allow the camera sensor to warmup,
 # and start the FPS counter
@@ -30,6 +35,8 @@ height = vs.stream.get(cv.CAP_PROP_FRAME_HEIGHT)
 
 winName = 'Object Detection'
 cv.namedWindow(winName, cv.WINDOW_NORMAL)
+#cv.resizeWindow(winName, (int(width/2),int(height/2)))
+cv.resizeWindow(winName, (int(width),int(height)))
 
 symbolDetector = RectanglesDetector()
 #symbolDetector = SymbolDetectorYOLO()
@@ -42,7 +49,8 @@ while cv.waitKey(1) < 0:
     # to have a maximum width of 400 pixels
     frame = vs.read()
 #    frame = imutils.resize(frame, width=400)
-    
+    g = camera.awb_gains
+    print(g)
     symbolDetector.setImage(frame)
     symbolRec, symbolPos, symbolSize, frameDet = symbolDetector.detectSymbol()
     if symbolRec:
@@ -57,7 +65,11 @@ while cv.waitKey(1) < 0:
             bobbyDriver.driveLeft(steerAmount)
         else:
             bobbyDriver.driveStraight()
-        bobbyDriver.accelerate()
+        
+        if symbolSize <= C_STANDARDSIZE:
+            bobbyDriver.accelerate()
+        else:
+            bobbyDriver.stop()
     else:
         bobbyDriver.stop()
         
