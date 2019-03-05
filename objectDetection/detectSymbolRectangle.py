@@ -15,8 +15,8 @@ C_UPPERLIMITRED2 = np.array([179,255,225])
 C_MINWIDTH = 30
 C_MINHEIGHT = 30
 
-C_XDEVIATION = 30
-C_RECTDISTANCE = 30
+C_XDEVIATION = 50
+C_RECTDISTANCE = 50
 
 class RectangleShape:
     def __init__(self, contour, cX, cY, width, height):

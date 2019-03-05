@@ -3,6 +3,7 @@ from time import sleep
 
 SERVOPIN = 18
 ACCPIN = 17
+BUTTONPIN = 27
 
 class BobbycarDriver:
     def __init__(self):
@@ -10,29 +11,33 @@ class BobbycarDriver:
         self.pi.set_mode(SERVOPIN, pigpio.OUTPUT)
         self.pi.set_mode(ACCPIN, pigpio.OUTPUT)
         self.steeringwheelPos = 0
-        self.currentSteeringDirection = "straight"
-
+        self.pi.set_mode(BUTTONPIN, pigpio.INPUT)
+        self.pi.set_pull_up_down(BUTTONPIN, pigpio.PUD_UP)
+    
+    def startYet(self):
+        return True if self.pi.read(BUTTONPIN) == 0 else False
+    
+    def stopYet(self):
+        return True if self.pi.read(BUTTONPIN) == 1 else False
+        
     def driveLeft(self, amount):
         if 0 <= amount <= 1:
-            # map 0...1 to 1500...1000
-            servoAmount = 1500 - 500*amount
+            # map 0...1 to 1500...670 - calibrated servo values
+            servoAmount = 1500 - 830*amount
             self.pi.set_servo_pulsewidth(SERVOPIN, servoAmount)
             print('servo steered left by %s' % amount)
-            self.currentSteeringDirection = "left"
         else:
             print('Parameter amount must be between 0 and 1')
             
     def driveStraight(self):
         self.pi.set_servo_pulsewidth(SERVOPIN, 1500)
-        self.currentSteeringDirection = "straight"
     
     def driveRight(self, amount):
         if 0 <= amount <= 1:
-            # map 0...1 to 1500...2000
-            servoAmount = 1500 + 500*amount
+            # map 0...1 to 1500...2330 - calibrated servo values
+            servoAmount = 1500 + 830*amount
             self.pi.set_servo_pulsewidth(SERVOPIN, servoAmount)
             print('servo steered right by %s' % amount)
-            self.currentSteeringDirection = "right"
         else:
             print('Parameter amount must be between 0 and 1')
         
